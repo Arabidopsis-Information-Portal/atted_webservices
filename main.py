@@ -47,26 +47,27 @@ def search(arg):
     if ('database_version' in arg):
     	svc_url = svc_url + '&db=' + arg['database_version']
 
-    print json.dumps( { 'url':svc_url } )
-    print '---'
-
     r = requests.get(svc_url)
 
     # Interpret the result string, turn it into AIP JSON records
-    for result in r.json()['results']:
+    r_json = r.json()
 
-        agi_locus_from_entrez = resolve_locus(result['gene'])
+    if ('results' in r_json):
 
-        transformed_cc = {
-        'class': 'locus_relationship',
-        'locus': locus,
-        'related_entity': agi_locus_from_entrez,
-        'relationships': [ {'type': 'coexpression', 'direction': 'undirected',
-        'scores': [ 
-        {rtype : result[rtype_out] }]}]}
+        for result in r_json['results']:
 
-        print json.dumps(transformed_cc, indent=3)
-        print '---'
+            agi_locus_from_entrez = resolve_locus(result['gene'])
+
+            transformed_cc = {
+            'class': 'locus_relationship',
+            'locus': locus,
+            'related_entity': agi_locus_from_entrez,
+            'relationships': [ {'type': 'coexpression', 'direction': 'undirected',
+            'scores': [ 
+            {rtype : result[rtype_out] }]}]}
+
+            print json.dumps(transformed_cc, indent=3)
+            print '---'
 
 
 def resolve_locus(entrez_id):
