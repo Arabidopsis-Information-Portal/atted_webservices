@@ -46,6 +46,9 @@ def search(arg):
     if ('database_version' in arg):
     	svc_url = svc_url + '&db=' + arg['database_version']
 
+    print json.dumps( { 'url':svc_url } )
+    print '---'
+
     r = requests.get(svc_url)
 
     # Interpret the result string, turn it into AIP JSON records
@@ -74,7 +77,7 @@ def resolve_locus(entrez_id):
     response = requests.post( 'http://129.114.7.134:7474/db/data/transaction/commit',data=payload, headers={'Content-Type': 'application/json','Accept': 'application/json; charset=UTF-8'})
     result = response.json()['results'][0]['data'][0]['row'][0]
     return result
-
+    #return 'FOOBAZ'
 
 def list(arg):
 	pass
