@@ -1,0 +1,17 @@
+.DS_Store
+*.pyc
+*.tmp
+Worklog.txt
+*.svn
+*.bzr
+*.bzrignore
+*.bzrtags
+*.hg
+*.hgignore
+*.hgtags
+_darcs
+*.file-segments
+*.part
+CVS
+RCS
+SCCS
