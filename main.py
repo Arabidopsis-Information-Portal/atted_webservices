@@ -39,7 +39,8 @@ def search(arg):
     	rtype_native = 'cor'
     	rtype_out = 'correlation'
     
-    cutoff = arg['threshold']
+    # Force cutoff to be a float
+    cutoff = float (arg['threshold'] )
 
 
     svc_url = 'http://atted.jp/cgi-bin/api2.cgi?gene=' + locus + '&type=' + rtype_native + '&cutoff=' + repr(cutoff)
