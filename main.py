@@ -42,6 +42,7 @@ def search(arg):
     # Force cutoff to be a float
     cutoff = float (arg['threshold'] )
 
+
     svc_url = 'http://atted.jp/cgi-bin/api2.cgi?gene=' + locus + '&type=' + rtype_native + '&cutoff=' + repr(cutoff)
     if ('database_version' in arg):
     	svc_url = svc_url + '&db=' + arg['database_version']
@@ -54,8 +55,8 @@ def search(arg):
     if ('results' in r_json):
 
         for result in r_json['results']:
-            # resolve_locus is an example of a function that makes an authenticated Araport API call
-            agi_locus_from_entrez = resolve_locus(result['gene'], arg['headers'])
+
+            agi_locus_from_entrez = resolve_locus(result['gene'])
 
             transformed_cc = {
             'class': 'locus_relationship',
@@ -69,22 +70,16 @@ def search(arg):
             print '---'
 
 
-def resolve_locus(entrez_id, request_headers):
-    #
-    # This function demonstrates how to call an Araport API using the authentication
-    # information that was passed from the service. As written, this passes all
-    # the request headers, but you may also extract and send specific headers
-    #
-    url = 'https://api.araport.org/community/v0.3/aip/resolver_fetch_locus_by_synonym_v0.2/search?identifier=' + entrez_id
-    response = requests.get(url, headers = request_headers)
-    if response.ok:
-        res = response.json()['result'][0]
-        if ('locus' in res):
-            locus_resolved = response.json()['result'][0]['locus']
-            return locus_resolved
-
-    return entrez_id
-
+def resolve_locus(entrez_id):
+	# Here, I replicate the code for the aip/synonym_to_locus because I can't make an authenticated call to an ADAMA service from within
+	# an ADAMA script. This will be remedied in 0.4 and I will replace this code with a call to synonym_to_locus
+    payload = json.dumps({
+'statements': [{
+'statement': "MATCH (a:Identifier { name:'%s' })-[:SYNONYM_OF*1..2]-(x:Identifier) WHERE x.kind IN ['TAIR'] return DISTINCT x.name, a.kind ORDER BY x.name" %(entrez_id,) }]})
+    response = requests.post( 'http://129.114.7.134:7474/db/data/transaction/commit',data=payload, headers={'Content-Type': 'application/json','Accept': 'application/json; charset=UTF-8'})
+    result = response.json()['results'][0]['data'][0]['row'][0]
+    return result
+    #return 'FOOBAZ'
 
 def list(arg):
 	pass
