@@ -1,11 +1,59 @@
---- 
+---
+name: atted_coexpressed_by_locus
 description: "Given a valid AGI locus, fetch coexpressed genes from the ATTED-II database"
 url: http://atted.jp/
 main_module: main.py
-name: atted_coexpressed_by_locus
 type: query
-version: 0.1
-whitelist: 
+version: 0.2.0
+whitelist:
   - atted.jp
   - 129.114.7.134
   - 130.34.188.241
+icon: logo.gif
+tags:
+    - 'coexpression'
+    - 'expression'
+
+validate_request: true
+endpoints:
+    /search:
+        parameters:
+            - name: locus
+              description: Arabidopsis gene identifier
+              type: string
+              required: true
+              default: 'At2g26230'
+            - name: relationship_type
+              description: Relationship type
+              type: string
+              required: true
+              default: 'correlation_coefficient'
+              enum:
+                - 'correlation_coefficient'
+                - 'mutual_rank'
+            - name: threshold
+              description: Cut-off value for relationship
+              type: number
+              format: float
+              default: 0.85
+              required: true
+            - name: database_version
+              description: ATTED-II database version
+              type: string
+              required: false
+
+authors:
+    - name: Matt Vaughn
+      email: vaughn@tacc.utexas.edu
+      sponsor_organization: Texas Advanced Computing Center
+      sponsor_uri: http://www.tacc.utexas.edu/
+
+sources:
+    - title: ATTED-II
+      description: Provides co-regulated gene relationships to estimate gene functions
+      sponsor_organization_name: Tohoku University
+      sponsor_uri: http://www.tohoku.ac.jp/en/
+      provider_name: Dr. Takeshi Obayashi
+      provider_email: support@atted.jp
+      uri: http://atted.jp/
+      license: Creative Commons Attribution 2.1
