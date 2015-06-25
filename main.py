@@ -17,31 +17,28 @@ def search(arg):
 # threshold: cuotff value for relationship
 # database_version: used any time a remote service has a 'version' parameter. Onus is on end user to send correct value
 
-    if not (('locus' in arg) and ('threshold' in arg) and ('relationship_type' in arg)):
-        return
-    
     locus = arg['locus']
     locus = locus.upper()
     p = re.compile('AT[1-5MC]G[0-9]{5,5}', re.IGNORECASE)
     if not p.search(locus):
-        return
+        raise Exception('Invalid locus ID')
 
     rtype = arg['relationship_type']
     rtype_native = rtype
     rtype_out = rtype
 
     if not rtype in ['mutual_rank', 'correlation_coefficient']:
-    	return
+        raise Exception('Invalid relationship_type')
+
     if rtype == 'mutual_rank':
     	rtype_native = 'mr'
     	rtype_out = 'mutual_rank'
     elif rtype == 'correlation_coefficient':
     	rtype_native = 'cor'
     	rtype_out = 'correlation'
-    
+
     # Force cutoff to be a float
     cutoff = float (arg['threshold'] )
-
 
     svc_url = 'http://atted.jp/cgi-bin/api2.cgi?gene=' + locus + '&type=' + rtype_native + '&cutoff=' + repr(cutoff)
     if ('database_version' in arg):
@@ -49,37 +46,48 @@ def search(arg):
 
     r = requests.get(svc_url)
 
+    # Raise exception on bad HTTP status
+    r.raise_for_status()
+
     # Interpret the result string, turn it into AIP JSON records
-    r_json = r.json()
+    try:
+        r_json = r.json()
 
-    if ('results' in r_json):
+        if ('results' in r_json):
 
-        for result in r_json['results']:
+            for result in r_json['results']:
 
-            agi_locus_from_entrez = resolve_locus(result['gene'])
+                agi_locus_from_entrez = resolve_locus(result['gene'])
 
-            transformed_cc = {
-            'class': 'locus_relationship',
-            'locus': locus,
-            'related_entity': agi_locus_from_entrez,
-            'relationships': [ {'type': 'coexpression', 'direction': 'undirected',
-            'scores': [ 
-            {rtype : result[rtype_out] }]}]}
+                transformed_cc = {
+                'class': 'locus_relationship',
+                'locus': locus,
+                'related_entity': agi_locus_from_entrez,
+                'relationships': [ {'type': 'coexpression', 'direction': 'undirected',
+                'scores': [
+                {rtype : result[rtype_out] }]}]}
 
-            print json.dumps(transformed_cc, indent=3)
-            print '---'
-
+                print json.dumps(transformed_cc, indent=3)
+                print '---'
+    except ValueError:
+        raise Exception('Unable to handle response '.format(r.text) )
 
 def resolve_locus(entrez_id):
 	# Here, I replicate the code for the aip/synonym_to_locus because I can't make an authenticated call to an ADAMA service from within
 	# an ADAMA script. This will be remedied in 0.4 and I will replace this code with a call to synonym_to_locus
+    NEO4J_SERVER_IP='52.5.242.162'
+    NEO4J_SERVER_PORT='7474'
+    URL = 'http://' + NEO4J_SERVER_IP + ':' + NEO4J_SERVER_PORT + '/db/data/transaction/commit'
+
     payload = json.dumps({
 'statements': [{
 'statement': "MATCH (a:Identifier { name:'%s' })-[:SYNONYM_OF*1..2]-(x:Identifier) WHERE x.kind IN ['TAIR'] return DISTINCT x.name, a.kind ORDER BY x.name" %(entrez_id,) }]})
-    response = requests.post( 'http://129.114.7.134:7474/db/data/transaction/commit',data=payload, headers={'Content-Type': 'application/json','Accept': 'application/json; charset=UTF-8'})
+    response = requests.post( URL,
+        auth=('neo4j', '4UbczmDtK4eY6sfS'),
+        data=payload,
+        headers={'Content-Type': 'application/json','Accept': 'application/json; charset=UTF-8'})
     result = response.json()['results'][0]['data'][0]['row'][0]
     return result
-    #return 'FOOBAZ'
 
-def list(arg):
-	pass
+def list(args):
+    raise Exception('Not implemented yet')
