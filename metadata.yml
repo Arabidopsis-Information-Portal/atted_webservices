@@ -22,7 +22,7 @@ endpoints:
               description: Arabidopsis gene identifier
               type: string
               required: true
-              default: 'At2g26230'
+              default: 'AT2G39730'
             - name: relationship_type
               description: Relationship type
               type: string
