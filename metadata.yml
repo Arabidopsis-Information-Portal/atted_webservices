@@ -14,6 +14,7 @@ icon: logo.gif
 tags:
     - 'coexpression'
     - 'expression'
+timeout: 10
 
 validate_request: true
 endpoints:
