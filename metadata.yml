@@ -9,6 +9,7 @@ whitelist:
   - atted.jp
   - 129.114.7.134
   - 130.34.188.241
+  - 52.5.242.162
 icon: logo.gif
 tags:
     - 'coexpression'
