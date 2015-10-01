@@ -4,7 +4,7 @@ name: atted_coex
 description: Passthrough adapter for ATTED-II API (version 1)
 url: http://atted.jp/API/coex/
 type: passthrough
-version: 1.0
+version: 1.1
 whitelist:
   - atted.jp
 icon: logo.gif
