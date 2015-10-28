@@ -75,7 +75,7 @@ def search(arg):
 def resolve_locus(entrez_id):
 	# Here, I replicate the code for the aip/synonym_to_locus because I can't make an authenticated call to an ADAMA service from within
 	# an ADAMA script. This will be remedied in 0.4 and I will replace this code with a call to synonym_to_locus
-    NEO4J_SERVER_IP='52.5.242.162'
+    NEO4J_SERVER_IP='52.4.211.39'
     NEO4J_SERVER_PORT='7474'
     URL = 'http://' + NEO4J_SERVER_IP + ':' + NEO4J_SERVER_PORT + '/db/data/transaction/commit'
 
