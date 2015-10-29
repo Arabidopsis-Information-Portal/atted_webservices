@@ -4,7 +4,7 @@ description: "Given a valid AGI locus, fetch coexpressed genes from the ATTED-II
 url: http://atted.jp/
 main_module: services.atted_coexpressed_by_locus.main.py
 type: query
-version: 2.11111111111 
+version: 2.1 
 whitelist:
   - atted.jp
   - 129.114.7.134
