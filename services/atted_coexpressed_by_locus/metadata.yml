@@ -1,6 +1,6 @@
 ---
 name: atted_coexpressed_by_locus
-description: "Given a valid AGI locus, fetch coexpressed genes from the ATTED-II database"
+description: "Given a valid AGI locus, fetch coexpressed genes from the ATTED-II database (version 2)"
 url: http://atted.jp/
 main_module: services.atted_coexpressed_by_locus.main.py
 type: query
