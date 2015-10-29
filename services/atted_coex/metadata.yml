@@ -4,7 +4,7 @@ name: atted_coex
 description: Passthrough adapter for ATTED-II API (version 1)
 url: http://atted.jp/API/coex/
 type: passthrough
-version: 1.1
+version: 1.2
 whitelist:
   - atted.jp
 icon: logo.gif
@@ -12,9 +12,39 @@ tags:
     - 'coexpression'
     - 'expression'
 
+endpoints:
+    /access/{locus}/{measure}/{cutoff}:
+        get:
+            summary: Retrieve coexpression data
+            description: Return all MR and PCC coexpression data from the guide gene.
+            parameters:
+                - name: locus
+                  in: path
+                  description: AGI Gene Locus identifier
+                  type: string
+                  required: true
+                - name: measure
+                  in: path
+                  description: Coexpression measure
+                  type: string
+                  required: false
+                  enum:
+                      - 'cor'
+                      - 'mr'
+                - name: cutoff
+                  in: path
+                  description: Cutoff value for coexpression measure
+                  type: number
+                  format: float
+                  required: false
+
 authors:
     - name: Vivek Krishnakumar
       email: vkrishna@jcvi.org
+      sponsor_organization: J. Craig Venter Institute
+      sponsor_uri: https://www.jcvi.org
+    - name: Erik Ferlanti
+      email: erik@jcvi.org
       sponsor_organization: J. Craig Venter Institute
       sponsor_uri: https://www.jcvi.org
 
