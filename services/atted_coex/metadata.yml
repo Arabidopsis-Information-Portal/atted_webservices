@@ -17,6 +17,8 @@ endpoints:
         get:
             summary: Retrieve coexpression data
             description: Return all MR and PCC coexpression data from the guide gene.
+            produces:
+                - text/plain
             parameters:
                 - name: locus
                   in: path
