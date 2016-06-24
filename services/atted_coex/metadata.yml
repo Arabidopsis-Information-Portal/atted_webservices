@@ -25,6 +25,7 @@ endpoints:
                   description: AGI Gene Locus identifier
                   type: string
                   required: true
+                  default: At1g01010
                 - name: measure
                   in: path
                   description: Coexpression measure
