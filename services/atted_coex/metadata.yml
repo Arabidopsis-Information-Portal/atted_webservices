@@ -2,12 +2,12 @@
 
 name: atted_coex
 description: Passthrough adapter for ATTED-II API (version 1)
-url: https://apps.araport.org/proxy/atted/API/coex/
+url: http://adama-prod-aws.mattdotvaughn.org/proxy/atted/API/coex/
 type: passthrough
 version: 1.1
 whitelist:
   - atted.jp
-  - apps.araport.org
+  - adama-prod-aws.mattdotvaughn.org
 icon: logo.gif
 tags:
     - 'coexpression'
