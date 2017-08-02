@@ -57,7 +57,8 @@ def search(arg):
 
             for result in r_json['results']:
 
-                agi_locus_from_entrez = resolve_locus(result['gene'])
+                #agi_locus_from_entrez = resolve_locus(result['gene'])
+                agi_locus_from_entrez = result['gene']
 
                 transformed_cc = {
                 'class': 'locus_relationship',
